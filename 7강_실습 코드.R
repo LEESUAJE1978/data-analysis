@@ -1,4 +1,5 @@
 #0. 참고사이트: https://r4ds.had.co.nz/####
+#https://github.com/LEESUAJE1978/data-analysis
 
 #1.패키지 설치하기 ####
 install.packages('dplyr')
