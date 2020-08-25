@@ -120,9 +120,14 @@ speed_zone <- accidents %>% filter(accidents$Speed_limit %in% c('50','60','70'))
 pie(table(speed_zone$Speed_limit))
 
 #5.5.상관관계
+if(!require('GGally')){
+  install.packages('GGally')
+  require('GGally')
+}
 cor(accidents_sam) #r은 모든 데이터가 수치형 데이터여야 함
 cor(accidents_sam[,2:5])
 pairs(accidents_sam[,2:5])
+ggpairs(accidents_sam[,2:5])#산점도와 밀도 그래프를 한번에 보여줌
 heatmap(as.matrix(accidents_sam[,2:5]), scale = "col")
 
 #http://blog.naver.com/PostView.nhn?blogId=pmw9440&logNo=221576168716 참고
