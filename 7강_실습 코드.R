@@ -9,10 +9,13 @@ library(tidyverse)
 
 
 #2. 원하는 데이터 추출하기 filter ####
+starwars
 starwars %>%
   filter(species == "Droid")
 starwars %>%
   select(name, ends_with("color"))
+
+help("select")
 #3. 원하는 컬럼 생성하기 ####
 starwars %>%
   mutate(bmi = mass / (height/100) ^ 2) %>%
@@ -29,7 +32,7 @@ starwars %>%
   group_by(species) %>%
   summarize(
     n = n(),
-    mass = mean(mass, na.rm = TRUE),
+    mass = mean(mass, na.rm = T),
     .groups = 'drop'
   ) %>%
   filter(n>1)
@@ -41,6 +44,7 @@ df_2 <- data.frame(x = 4:6, y = 4:6)
 #6.1. 행 기준 병합
 rbind(df_1, df_2)
 bind_rows(df_1, df_2)
+
 
 df_3 <- data.frame(x = 7:9, z = 7:9)
 rbind(df_1, df_3)
