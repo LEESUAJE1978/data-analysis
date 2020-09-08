@@ -1,6 +1,9 @@
 #0.패키지 로딩####
-require()
-
+require('tidyverse')
+if(!require('data.table')){ #데이터 빠르게 읽어 오는 패키지
+  install.packages("data.table")
+  require('data.table')
+}
 #.1. 파일 경로 확인####
 getwd() #현재 파일 경로 확인
 dir() #현재 경로 폴더에 저장된 파일 확인인
