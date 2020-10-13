@@ -2,30 +2,30 @@
 library(httr)
 library(rvest)
 library(RSelenium)
+library(rJava)
+require(binman)
+require(wdman)
 
-# port <- 50001L
-# class( x = port)
-# driver <- chrome(port = port, version = "85.0.4183.87")
-# remote <- remoteDriver(port = port, browserName = 'chorome')
-# remote$open()
-# list_versions(appname ='chromedriver')
-
-#1. 드라이버####
+#1. Selenium 실행- chrome 연결####
+port <- 50001L #포트 설정
+list_versions(appname ='chromedriver')
+driver <- chrome(port = port, version = "85.0.4183.87")
 driver <- remoteDriver(remoteServerAddr = 'localhost', 
-                     port = 50001L, # 포트번호 입력 
-                     browserName = "chrome") 
-
+                     port = port, # 포트번호 입력 
+                     browserName = "chrome",
+                     version = '85.0.4183.87') 
 driver$open() #서버에 연결
 driver$navigate("https://www.youtube.com/watch?v=H8YW1tlsmE8") #이 홈페이지로 이동 
 
+#2.element 추출####
 element <- driver$findElement("css", "body")
 
-# Scroll down 10 times
-for(i in 1:10){
+#2.1 Scroll down n- times
+for(i in 1:2){
   element$sendKeysToElement(list("key"="page_down"))
   if(exists("pagesource")){
     if(pagesource == driver$getPageSource()[[1]]){
-      flag <- FALSE
+      #flag <- FALSE
       writeLines(paste0("Scrolled down ",n*counter," times.\n"))
       } else {
         pagesource <- driver$getPageSource()[[1]]
@@ -37,21 +37,21 @@ for(i in 1:10){
   }
 
 
-html <- read_html(pagesource)
+#3. scraping:ID와 Comment 추출
+html <- read_html(pagesource) #html 파일 가져오기
 
 youtube_user_IDs <- html %>% html_nodes('div#header-author > a > span')
 youtube_user_IDs <- youtube_user_IDs %>% html_text(trim = T)
 
-
-
 youtube_user_comments <- html %>% html_nodes('yt-formatted-string#content-text')
-youtube_user_comments <- youtube_user_coments %>% html_text(trim = T)
+youtube_user_comments <- youtube_user_comments %>% html_text(trim = T)
 
-class(youtube_user_comments)
-convert <- as.list(youtube_user_comments)
-df <- as.data.frame(convert)
-data.frame(lapply(youtube_user_comments, type.convert), stringsAsFactors = FALSE)
-data.frame(lapply(youtube_user_IDs, type.convert), stringsAsFactors = FALSE)
+#4.데이터 프레임 생성####
 
+df <-data.frame(youtube_user_IDs, youtube_user_comments)
+head(df,2)
+
+#5. csv파일 변환 ####
+write.csv(df, 'comment.csv')
 
 #https://awesomeopensource.com/project/yusuzech/r-web-scraping-cheat-sheet
