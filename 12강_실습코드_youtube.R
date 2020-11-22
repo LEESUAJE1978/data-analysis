@@ -7,7 +7,7 @@ require(binman)
 require(wdman)
 
 #1. Selenium 실행- chrome 연결####
-port <- 50001L #포트 설정
+port <- 4445L #포트 설정
 list_versions(appname ='chromedriver')
 driver <- chrome(port = port, version = "85.0.4183.87")
 driver <- remoteDriver(remoteServerAddr = 'localhost', 
